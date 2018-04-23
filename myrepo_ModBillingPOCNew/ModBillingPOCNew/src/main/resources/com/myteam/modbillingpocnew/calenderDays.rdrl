@@ -1,0 +1,13 @@
+package com.myteam.modbillingpocnew;
+
+import java.lang.Number;
+import com.myteam.RequestBillingDO;
+
+rule "calenderDays"
+	salience 110
+	dialect "mvel"
+	when
+		$rb : RequestBillingDO( calenderDays == 0 )
+	then
+		$rb.setCalenderDays( 30 );
+end

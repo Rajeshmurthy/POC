@@ -1,0 +1,13 @@
+package com.myteam.modbillingpocnew;
+
+import java.lang.Number;
+import com.myteam.RequestBillingDO;
+
+rule "MonthlyFRule"
+	dialect "mvel"
+	salience 105
+	when
+		$bd : RequestBillingDO( frequency == "m" || frequency == "M" || frequency matches "" )
+	then
+		$bd.setFrequencyValue( 1 );
+end

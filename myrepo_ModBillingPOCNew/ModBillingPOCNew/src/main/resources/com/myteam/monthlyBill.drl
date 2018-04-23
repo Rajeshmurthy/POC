@@ -1,0 +1,76 @@
+package com.myteam;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.text.DateFormat;
+import com.mod.billing.utils.DateUtils;
+
+rule "Calculate next Bill Date"
+salience 100
+lock-on-active
+    when
+        $billObj :  RequestBillingDO()
+        $response : ResponseBillingDO()
+      
+    then
+        Date grpBillDate = DateUtils.convertStringToDateFormat1 ($billObj.getGroupBillDate());
+        Date subscriptionDate =  DateUtils.convertStringToDateFormat1 ($billObj.getSubscriptionDate());
+		int nbMonth= 1;
+        System.out.println("billObj.getFrequency() is ::"+$billObj.getFrequency()   +""+$billObj.getFrequencyValue());
+        Date nextBillToDate= DateUtils.getNextBillToDate(grpBillDate,$billObj.getFrequencyValue());
+        System.out.println("NextBillDate is ::"+nextBillToDate);
+	
+        $response.setNextBillToDate(DateUtils.convertDateToString(nextBillToDate));       
+end
+
+rule "Calculate Number of Days"
+salience 99
+lock-on-active
+    when
+        $billObj :  RequestBillingDO()
+        $response : ResponseBillingDO()
+      
+    then
+		System.out.println("Before NextBillToDate is ::"+$response.getNextBillToDate());
+		Date nextBillToDate= DateUtils.convertStringToDateFormat2($response.getNextBillToDate());
+    	System.out.println("After NextBillDate is ::"+nextBillToDate);
+		System.out.println("Before SubscriptionDate is ::"+$billObj.getSubscriptionDate());
+        Date subscriptionDate = DateUtils.convertStringToDateFormat1($billObj.getSubscriptionDate()); 
+        System.out.println("After subscriptionDate is ::"+subscriptionDate);   
+       	int noOfDays = DateUtils.countNumberOfDays(subscriptionDate,nextBillToDate);
+       	int noOfMonths = DateUtils.countNumberOfMonths(subscriptionDate,nextBillToDate);
+       	$response.setNoOfBillingMonths(noOfMonths);
+        $response.setNoOfBillingDays(noOfDays);
+       
+end
+	
+rule "Calculate Total/final Premium"
+salience 98
+lock-on-active
+    when
+        $billObj :  RequestBillingDO()
+        $response : ResponseBillingDO()
+      
+    then
+		double totalPremium =0;
+		System.out.println(" $billObj.getBasePremium is "+ $billObj.getBasePremium());
+		System.out.println(" $billObj.getCalenderDays()  " +$billObj.getCalenderDays());
+		totalPremium = DateUtils.calculatePremium($response.getNoOfBillingDays(),$response.getNoOfBillingMonths(),$billObj.getBasePremium(),$billObj.getCalenderDays());
+        System.out.println("totalPremium ###########"+totalPremium);
+       
+        if(totalPremium > 0){
+        if($response.getPopulateRoundValue() == true)
+        {
+            totalPremium= DateUtils.roundPremium2Digit(totalPremium); 
+        }
+       
+        System.out.println("Inside if ########### round value"+totalPremium);
+        $response.setRuleMessage("Calculated Premium successfully");
+        }
+        $response.setTotalPremium(totalPremium);
+        System.out.println("totalPremium ###########"+totalPremium);
+         
+       
+end

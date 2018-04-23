@@ -1,0 +1,14 @@
+package com.myteam.modbillingpocnew;
+
+import java.lang.Number;
+import com.myteam.RequestBillingDO;
+import com.myteam.ResponseBillingDO;
+
+rule "PopulateRoundValue"
+	dialect "mvel"
+	salience 1001
+	when
+		response : ResponseBillingDO( )
+	then
+		response.setPopulateRoundValue( true );
+end

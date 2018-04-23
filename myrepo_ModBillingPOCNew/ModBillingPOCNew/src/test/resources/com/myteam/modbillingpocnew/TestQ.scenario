@@ -1,0 +1,131 @@
+<scenario>
+  <name>TestQ.scenario</name>
+  <maxRuleFirings>100000</maxRuleFirings>
+  <globals/>
+  <fixtures>
+    <fact-data>
+      <type>RequestBillingDO</type>
+      <fieldData>
+        <field-data>
+          <name>groupBillDate</name>
+          <value>4/01/2018</value>
+          <nature>4</nature>
+        </field-data>
+        <field-data>
+          <name>subscriptionDate</name>
+          <value>2/15/2018</value>
+          <nature>4</nature>
+        </field-data>
+        <field-data>
+          <name>frequency</name>
+          <value>M</value>
+          <nature>4</nature>
+        </field-data>
+      </fieldData>
+      <name>input</name>
+      <isModify>false</isModify>
+    </fact-data>
+    <fact-data>
+      <type>ResponseBillingDO</type>
+      <fieldData/>
+      <name>output</name>
+      <isModify>false</isModify>
+    </fact-data>
+    <execution-trace>
+      <executionTimeResult>72</executionTimeResult>
+      <numberOfRulesFired>7</numberOfRulesFired>
+    </execution-trace>
+    <expect-fact>
+      <fieldValues>
+        <expect-field>
+          <fieldName>ruleMessage</fieldName>
+          <expected>Calculated Premium successfully</expected>
+          <actualResult>Calculated Premium successfully</actualResult>
+          <successResult>true</successResult>
+          <explanation>[ResponseBillingDO] field [ruleMessage] was [Calculated Premium successfully].</explanation>
+          <operator>==</operator>
+          <nature>1</nature>
+        </expect-field>
+        <expect-field>
+          <fieldName>nextBillToDate</fieldName>
+          <expected>01-May-2018</expected>
+          <actualResult>01-Jun-2018</actualResult>
+          <successResult>true</successResult>
+          <explanation>[ResponseBillingDO] field [nextBillToDate] was [01-May-2018].</explanation>
+          <operator>==</operator>
+          <nature>1</nature>
+        </expect-field>
+        <expect-field>
+          <fieldName>totalPremium</fieldName>
+          <expected>253.33</expected>
+          <actualResult>253.33</actualResult>
+          <successResult>true</successResult>
+          <explanation>[ResponseBillingDO] field [totalPremium] was [253.33].</explanation>
+          <operator>==</operator>
+          <nature>1</nature>
+        </expect-field>
+        <expect-field>
+          <fieldName>populateRoundValue</fieldName>
+          <expected>true</expected>
+          <actualResult>true</actualResult>
+          <successResult>true</successResult>
+          <explanation>[ResponseBillingDO] field [populateRoundValue] was [true].</explanation>
+          <operator>==</operator>
+          <nature>0</nature>
+        </expect-field>
+      </fieldValues>
+      <name>ResponseBillingDO</name>
+      <anonymous>true</anonymous>
+    </expect-fact>
+    <expect-fact>
+      <fieldValues>
+        <expect-field>
+          <fieldName>basePremium</fieldName>
+          <expected>100</expected>
+          <actualResult>105.0</actualResult>
+          <successResult>true</successResult>
+          <explanation>[RequestBillingDO] field [basePremium] was [100].</explanation>
+          <operator>==</operator>
+          <nature>1</nature>
+        </expect-field>
+        <expect-field>
+          <fieldName>calenderDays</fieldName>
+          <expected>30</expected>
+          <actualResult>31</actualResult>
+          <successResult>true</successResult>
+          <explanation>[RequestBillingDO] field [calenderDays] was [30].</explanation>
+          <operator>==</operator>
+          <nature>1</nature>
+        </expect-field>
+        <expect-field>
+          <fieldName>frequencyValue</fieldName>
+          <expected>1</expected>
+          <actualResult>3</actualResult>
+          <successResult>true</successResult>
+          <explanation>[RequestBillingDO] field [frequencyValue] was [1].</explanation>
+          <operator>==</operator>
+          <nature>1</nature>
+        </expect-field>
+      </fieldValues>
+      <name>RequestBillingDO</name>
+      <anonymous>true</anonymous>
+    </expect-fact>
+  </fixtures>
+  <lastRunResult>2018-04-23 11:51:36.380 UTC</lastRunResult>
+  <rules/>
+  <inclusive>false</inclusive>
+  <packageName>com.myteam.modbillingpocnew</packageName>
+  <imports>
+    <imports>
+      <org.kie.soup.project.datamodel.imports.Import>
+        <type>com.myteam.RequestBillingDO</type>
+      </org.kie.soup.project.datamodel.imports.Import>
+      <org.kie.soup.project.datamodel.imports.Import>
+        <type>com.myteam.ResponseBillingDO</type>
+      </org.kie.soup.project.datamodel.imports.Import>
+    </imports>
+  </imports>
+  <ksessions>
+    <string>defaultKieSession</string>
+  </ksessions>
+</scenario>

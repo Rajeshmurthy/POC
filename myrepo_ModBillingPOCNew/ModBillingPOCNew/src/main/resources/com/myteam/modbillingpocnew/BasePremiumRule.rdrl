@@ -1,0 +1,13 @@
+package com.myteam.modbillingpocnew;
+
+import java.lang.Number;
+import com.myteam.RequestBillingDO;
+
+rule "BasePremiumRule"
+	dialect "mvel"
+	salience 106
+	when
+		$rb : RequestBillingDO( basePremium == 0.0 )
+	then
+		$rb.setBasePremium( 100 );
+end
