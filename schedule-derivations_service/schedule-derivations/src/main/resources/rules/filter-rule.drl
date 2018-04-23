@@ -1,0 +1,30 @@
+package org.anthem.scheduleassignment;
+
+import org.anthem.scheduleassignment.model.ScheduleAssignmentRecord;
+import org.anthem.scheduleassignment.model.SelectedRecord;
+
+rule "filter rule"
+salience -10
+
+when
+		$finalRecord: SelectedRecord($finalWeight: weightage)
+		$schRecord: ScheduleAssignmentRecord($schWeightage: weightage)
+
+then
+		System.out.println("final record==" + $finalWeight);
+		System.out.println("schedule assignment==" + $schWeightage);
+			if (($finalWeight < $schWeightage) && ($schWeightage != 0)) {
+					System.out.println("==test======");		
+				    $finalRecord.setLoopID($schRecord.getResult());
+				    $finalRecord.setWeightage($schRecord.getWeightage());
+				    $finalRecord.setRecordID($schRecord.getRecordID());
+				    $finalRecord.setMbu($schRecord.getMbu());
+				    $finalRecord.setLob($schRecord.getLob());
+				    $finalRecord.setEffectiveDate($schRecord.getEffectiveDate());
+				    $finalRecord.setState($schRecord.getState());
+				    $finalRecord.setContractCode($schRecord.getContractCode());
+				    $finalRecord.setExchangeIndicator($schRecord.getExchangeIndicator());
+				    $finalRecord.setUseInd($schRecord.getUseInd());
+				    $finalRecord.setParTIN($schRecord.getParTIN());
+			}
+end
