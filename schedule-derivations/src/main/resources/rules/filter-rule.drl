@@ -1,0 +1,42 @@
+package org.anthem.scheduleassignment;
+
+import org.anthem.scheduleassignment.model.ScheduleAssignmentRecord;
+import org.anthem.scheduleassignment.model.SelectedRecord;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+
+rule "filter rule"
+salience -10
+
+when
+		$finalRecord: SelectedRecord($finalWeight: weightage)
+		$schRecord: ScheduleAssignmentRecord($schWeightage: weightage)
+
+then		
+		
+		List<ScheduleAssignmentRecord> inputOrder = null;
+		if ($finalRecord.getInAssignmentRecords() == null){
+			 inputOrder = new ArrayList();
+			 inputOrder.add($schRecord);
+		} else {
+			 inputOrder = $finalRecord.getInAssignmentRecords();
+			 inputOrder.add($schRecord);
+		}
+		
+		$finalRecord.setInAssignmentRecords(inputOrder);
+		
+		if (($finalWeight < $schWeightage) && ($schWeightage != 0)) {
+				    $finalRecord.setLoopID($schRecord.getResult());
+				    $finalRecord.setWeightage($schRecord.getWeightage());
+				    $finalRecord.setRecordID($schRecord.getRecordID());
+				    $finalRecord.setMbu($schRecord.getMbu());
+				    $finalRecord.setLob($schRecord.getLob());
+				    $finalRecord.setEffectiveDate($schRecord.getEffectiveDate());
+				    $finalRecord.setState($schRecord.getState());
+				    $finalRecord.setContractCode($schRecord.getContractCode());
+				    $finalRecord.setExchangeIndicator($schRecord.getExchangeIndicator());
+				    $finalRecord.setUseInd($schRecord.getUseInd());
+				    $finalRecord.setParTIN($schRecord.getParTIN());
+		}
+end
